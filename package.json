@@ -19,6 +19,7 @@
     "@hebcal/core": "^5.9.2",
     "@hebcal/leyning": "^9.0.6",
     "@solidjs/router": "^0.15.3",
-    "solid-js": "^1.9.5"
+    "solid-js": "^1.9.5",
+    "sort-es": "^1.7.14"
   }
 }
