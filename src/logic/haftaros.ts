@@ -1,10 +1,7 @@
 import { Aliyah } from "@hebcal/leyning/dist/esm/types";
 import parshaJson from "@hebcal/leyning/dist/esm/aliyot.json";
 import yomTovJson from "@hebcal/leyning/dist/esm/holiday-readings.json";
-import {
-  JsonFestivalAliyah,
-  JsonFestivalLeyning,
-} from "@hebcal/leyning/dist/esm/internalTypes";
+import { JsonFestivalLeyning } from "@hebcal/leyning/dist/esm/internalTypes";
 import { cloneHaftara } from "@hebcal/leyning/dist/esm/clone";
 
 type WithHaftara = Pick<JsonFestivalLeyning, "haft" | "seph">;

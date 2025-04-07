@@ -1,4 +1,4 @@
-import { type Component } from "solid-js";
+import { For, type Component } from "solid-js";
 
 import styles from "./KlafIndex.module.css";
 import { getAllHaftaros } from "./logic/haftaros";
@@ -9,45 +9,48 @@ import { getFirstPasuk } from "./logic/sefaria";
 import { Aliyah } from "@hebcal/leyning";
 import { noGeniza } from "./logic/no-geniza";
 
-const haftaros = getAllHaftaros();
+const allHaftaros = getAllHaftaros();
 
-const bySefer = Object.groupBy(haftaros, (h) => getSefer(h.k));
+const bySefer = Object.groupBy(allHaftaros, (h) => getSefer(h.k));
 
 const firstPasuk = query(getFirstPasuk, "firstPasuk");
 
 const KlafIndex: Component = () => {
-  console.log(haftaros);
   const params = useParams();
   const sefer = () => decodeURIComponent(params.sefer);
 
+  const haftaros = () =>
+    bySefer[sefer()]?.sort(byValue(toSortableIndex, byNumber()));
   return (
     <div class={styles.Root}>
       <header class={styles.Header}>
         <h1>Klaf Index</h1>
         <p>Click on a klaf to see the haftaros for that klaf.</p>
         <ul>
-          {Object.keys(bySefer).map((k) => {
-            return (
-              <li>
-                <a class={styles.link} href={`/klaf-index/${k}`}>
-                  {k}
-                </a>
-              </li>
-            );
-          })}
+          <For each={Object.keys(bySefer)}>
+            {(k) => {
+              return (
+                <li>
+                  <a class={styles.link} href={`/klaf-index/${k}`}>
+                    {k}
+                  </a>
+                </li>
+              );
+            }}
+          </For>
         </ul>
         <h2>Sefer: {sefer()}</h2>
       </header>
       <ol class={styles.List} dir="rtl">
-        {bySefer[sefer()]
-          ?.sort(byValue(toSortableIndex, byNumber()))
-          .map((h) => {
-            return (
+        {
+          <For each={haftaros()}>
+            {(h) => (
               <li>
                 <HaftaraDisplay h={h} />
               </li>
-            );
-          })}
+            )}
+          </For>
+        }
       </ol>
     </div>
   );
