@@ -18,7 +18,7 @@ render(
   () => (
     <Router>
       <Route path="/" component={Main} />
-      <Route path="/klaf-index/:sefer" component={KlafIndex} />
+      <Route path="/klaf-index/:sefer?" component={KlafIndex} />
     </Router>
   ),
   root

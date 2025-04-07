@@ -7,6 +7,9 @@
   display: flex;
   flex-wrap: wrap;
   min-height: 100vh;
+  > * {
+    flex-grow: 1;
+  }
 }
 .Header {
   background-color: #9c27b0;
