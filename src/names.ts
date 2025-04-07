@@ -30,12 +30,12 @@ export function fixSeferSuffix(name: string) {
 }
 
 export function toHebrewDisplay(h: Aliyah) {
-  return (
-    fixSeferSuffix(toHebrew(h.k)) +
-    " " +
-    h.b.split(":").map(gematriya).join(" ")
-  );
+  return fixSeferSuffix(toHebrew(h.k)) + " " + formatHebrewRange(h);
 }
+export function formatHebrewRange(h: Aliyah) {
+  return h.b.split(":").map(gematriya).join(" ");
+}
+
 export function toSefariaUrl(h: Aliyah) {
   const verse = h.b.replace(/:/g, ".");
   return `https://www.sefaria.org/${h.k.replace(/ /g, "_")}.${verse}?lang=he`;
