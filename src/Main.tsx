@@ -11,6 +11,9 @@ const Main: Component = () => {
         <a class={styles.link} href="/klaf-index">
           Klaf Index
         </a>
+        <a class={styles.link} href="/generate-table">
+          Klaf Index
+        </a>
       </header>
     </div>
   );

@@ -5,6 +5,7 @@ import "./index.css";
 import Main from "./Main";
 import { Route, Router } from "@solidjs/router";
 import KlafIndex from "./KlafIndex";
+import { TableGenerator } from "./TableGenerator";
 
 const root = document.getElementById("root");
 
@@ -19,6 +20,7 @@ render(
     <Router>
       <Route path="/" component={Main} />
       <Route path="/klaf-index/:sefer?" component={KlafIndex} />
+      <Route path="/generate-table" component={TableGenerator} />
     </Router>
   ),
   root
