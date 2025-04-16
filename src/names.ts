@@ -17,7 +17,16 @@ export const treiAsar = [
   "מַלְאָכִי",
 ].map(Locale.hebrewStripNikkud);
 
-export const toHebrew = (s: string) => Locale.gettext(s, "he-x-nonikud");
+const chumash: Record<string, string> = {
+  Genesis: "בראשית",
+  Exodus: "שמות",
+  Leviticus: "ויקרא",
+  Numbers: "במדבר",
+  Deuteronomy: "דברים",
+};
+
+export const toHebrew = (s: string) =>
+  chumash[s] || Locale.gettext(s, "he-x-nonikud");
 
 export function getSefer(name: string) {
   name = toHebrew(name);

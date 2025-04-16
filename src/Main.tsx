@@ -8,10 +8,10 @@ const Main: Component = () => {
     <div class={styles.App}>
       <header class={styles.header}>
         <img src={logo} class={styles.logo} alt="logo" />
-        <a class={styles.link} href="/klaf-index">
-          Klaf Index
-        </a>
         <a class={styles.link} href="/generate-table">
+          Generate Tables
+        </a>
+        <a class={styles.link} href="/klaf-index">
           Klaf Index
         </a>
       </header>

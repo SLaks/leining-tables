@@ -6,6 +6,7 @@ import Main from "./Main";
 import { Route, Router } from "@solidjs/router";
 import KlafIndex from "./KlafIndex";
 import { TableGenerator } from "./TableGenerator";
+import { Locale } from "@hebcal/core";
 
 const root = document.getElementById("root");
 
@@ -14,6 +15,8 @@ if (!root) {
     "Root element not found. Did you forget to add it to your index.html? Or maybe the id attribute got misspelled?"
   );
 }
+
+Locale.useLocale("he-x-nonikud");
 
 render(
   () => (

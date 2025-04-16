@@ -1,96 +1,70 @@
-import { flags, getHolidaysOnDate, HDate } from "@hebcal/core";
-import { getLeyningOnDate, Leyning } from "@hebcal/leyning";
+import { HDate } from "@hebcal/core";
 import { Component, createSignal } from "solid-js";
 import { Button, Stack } from "@suid/material";
+import { generateRows, LeiningTableRow } from "./table-generator/table-data";
+import { getYearTypes } from "./logic/year-types";
+import { getLeinings, LeiningsFilter } from "./table-generator/get-leinings";
+import DataTable from "./ui/DataTable";
 
 export const TableGenerator: Component = () => {
   const [isSephardic, setSephardic] = usePersistentState(
     "TableGenerator/isSephardic",
     false
   );
-  const [israeli, setIsraeli] = usePersistentState(
-    "TableGenerator/israeli",
-    false
-  );
   const [includeHaftaros, setIncludeHaftaros] = usePersistentState(
     "TableGenerator/includeHaftaros",
     true
   );
-
-  const [includeParshiyos, setIncludeParshiyos] = usePersistentState(
-    "TableGenerator/includeParshiyos",
-    true
-  );
-  const [includeYomTov, setIncludeYomTov] = usePersistentState(
-    "TableGenerator/includeYomTov",
-    true
-  );
-  const [includeFastDays, setIncludeFastDays] = usePersistentState(
-    "TableGenerator/includeFastDays",
-    false
-  );
-  const [includeCholHamoed, setIncludeCholHamoed] = usePersistentState(
-    "TableGenerator/includeCholHamoed",
-    false
+  const [filter, setFilter] = usePersistentState<LeiningsFilter>(
+    "TableGenerator/filter",
+    {
+      includeParshiyos: true,
+      includeYomTov: true,
+      includeCholHamoed: false,
+      includeFastDays: false,
+      israeli: false,
+    }
   );
 
   const [showYearSamples, setShowYearSamples] = usePersistentState(
     "TableGenerator/showYearSamples",
-    true
+    false
   );
-  const [startDate, setStartDate] = usePersistentState(
+  const [startYear, setStartYear] = usePersistentState(
     "TableGenerator/startDate",
-    new Date().toISOString().split("T")[0]
+    new HDate().getFullYear()
   );
   const [yearCount, setYearCount] = usePersistentState(
     "TableGenerator/yearCount",
     1
   );
 
+  const [table, setTable] = createSignal<LeiningTableRow[]>([]);
+
   return (
-    <Stack spacing={2} direction="row">
-      <Button variant="contained">Render Table</Button>
-      <Button variant="contained">Copy with headers</Button>
-      <Button variant="contained">Copy without headers</Button>
+    <Stack spacing={2} direction="column">
+      <Stack spacing={2} direction="row">
+        <Button variant="contained" onclick={populateTable}>
+          Render Table
+        </Button>
+        <Button variant="contained">Copy with headers</Button>
+        <Button variant="contained">Copy without headers</Button>
+      </Stack>
+      {table().length && <DataTable rows={table()} />}
     </Stack>
   );
 
-  function getLeinings(years: number[]) {
-    const results: Leyning[] = [];
-    for (const year of years) {
-      for (
-        let date = new HDate(year, 1, 1);
-        date.getFullYear();
-        date = date.add(1, "day")
-      ) {
-        const holidays = getHolidaysOnDate(date, israeli());
-        if (!holidays?.length && (date.getDay() !== 6 || !includeParshiyos()))
-          continue;
-
-        if (
-          !holidays?.some((h) => {
-            if (h.mask & flags.CHAG) return includeYomTov();
-            if (h.mask & flags.CHOL_HAMOED)
-              return date.getDate() === 6
-                ? includeYomTov()
-                : includeCholHamoed();
-            if (h.mask & flags.MAJOR_FAST) return includeFastDays();
-            if (h.mask & flags.MINOR_FAST) return includeFastDays();
-          })
-        )
-          continue;
-
-        results.push(
-          ...getLeyningOnDate(date, israeli(), true).filter(
-            (o): o is Leyning => {
-              // if (o.weekday) return false;
-              // if (o.parsha && includeParshiyos()) return true;
-              return true; // TODO: Delete
-            }
-          )
-        );
-      }
+  function getSelectedLeinings() {
+    let years: number[];
+    if (showYearSamples()) years = [...getYearTypes().values()];
+    else {
+      years = Array.from({ length: yearCount() }, (_, i) => startYear() + i);
     }
+    return getLeinings(years, filter());
+  }
+
+  function populateTable() {
+    setTable(generateRows(getSelectedLeinings(), { sephardic: isSephardic() }));
   }
 };
 
