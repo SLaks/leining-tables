@@ -1,10 +1,11 @@
 import { HDate } from "@hebcal/core";
 import { Component, createSignal } from "solid-js";
-import { Button, Stack } from "@suid/material";
+import { Button, Card, CardContent, Stack } from "@suid/material";
 import { generateRows, LeiningTableRow } from "./table-generator/table-data";
 import { getYearTypes } from "./logic/year-types";
 import { getLeinings, LeiningsFilter } from "./table-generator/get-leinings";
 import DataTable from "./ui/DataTable";
+import CheckableOptions from "./ui/CheckableOptions";
 
 export const TableGenerator: Component = () => {
   const [isSephardic, setSephardic] = usePersistentState(
@@ -42,7 +43,22 @@ export const TableGenerator: Component = () => {
   const [table, setTable] = createSignal<LeiningTableRow[]>([]);
 
   return (
-    <Stack spacing={2} direction="column">
+    <Stack spacing={2} direction="column" sx={{ padding: 2 }}>
+      <Stack spacing={2} direction="row">
+        <Card>
+          <CheckableOptions
+            options={filter()}
+            setOptions={setFilter}
+            titles={{
+              israeli: "ארץ ישראל",
+              includeParshiyos: "פרשיות",
+              includeYomTov: "ימים טובים",
+              includeCholHamoed: "חול המועד",
+              includeFastDays: "תעניות",
+            }}
+          />
+        </Card>
+      </Stack>
       <Stack spacing={2} direction="row">
         <Button variant="contained" onclick={populateTable}>
           Render Table
