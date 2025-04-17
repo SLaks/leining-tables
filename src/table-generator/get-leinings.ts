@@ -36,7 +36,7 @@ export function getLeinings(
         // For plain days, only include שבת if desired.
         if (date.getDay() !== 6 || !opts.includeParshiyos) continue;
       } else if (
-        holidays?.some((h) => {
+        !holidays?.some((h) => {
           if (h.mask & flags.CHAG) return opts.includeYomTov;
           if (h.mask & flags.CHOL_HAMOED)
             return date.getDate() === 6

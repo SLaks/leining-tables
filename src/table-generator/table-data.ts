@@ -39,7 +39,7 @@ export function generateRows(
 
     return {
       date: o.date.greg().toLocaleDateString(),
-      hebrewDate: o.date.render("he-x-nonikud"),
+      hebrewDate: o.date.renderGematriya(true),
 
       title,
 
