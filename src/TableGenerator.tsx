@@ -20,7 +20,7 @@ import { getYearTypes } from "./logic/year-types";
 import { getLeinings, LeiningsFilter } from "./table-generator/get-leinings";
 import DataTable from "./ui/DataTable";
 import CheckableOptions from "./ui/CheckableOptions";
-import { filterObject } from "./utils";
+import { filterObject, toTsv } from "./utils";
 
 const columnTitles: Record<keyof LeiningTableRow, string> = {
   date: "Date",
@@ -175,14 +175,28 @@ export const TableGenerator: Component = () => {
         <Button variant="contained" onclick={populateTable}>
           Render Table
         </Button>
-        <Button variant="contained">Copy with headers</Button>
-        <Button variant="contained">Copy without headers</Button>
+        <Button
+          variant="contained"
+          onclick={[copyTable, { includeTitles: true }]}
+        >
+          Copy with headers
+        </Button>
+        <Button
+          variant="contained"
+          onclick={[copyTable, { includeTitles: false }]}
+        >
+          Copy without headers
+        </Button>
       </Stack>
       {table().length && (
         <DataTable rows={table()} titles={selectedColumnTitles()} />
       )}
     </Stack>
   );
+
+  function copyTable(opts: { includeTitles: boolean }) {
+    navigator.clipboard.writeText(toTsv(selectedColumnTitles(), table(), opts));
+  }
 
   function getSelectedLeinings() {
     let years: number[];

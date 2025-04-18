@@ -34,7 +34,7 @@ export default function DataTable<T extends object>(props: {
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <For each={Object.keys(props.titles) as (keyof T)[]}>
-                  {(key) => <TableCell>{String(row[key])}</TableCell>}
+                  {(key) => <TableCell>{String(row[key] ?? "")}</TableCell>}
                 </For>
               </TableRow>
             )}

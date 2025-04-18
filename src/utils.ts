@@ -8,3 +8,19 @@ export function filterObject<T extends Record<string, unknown>>(
     )
   ) as { [K in keyof T]?: T[K] };
 }
+
+export function toTsv<T extends object>(
+  titles: { [K in keyof T]?: string },
+  rows: T[],
+  { includeTitles = true }
+) {
+  const results = includeTitles ? [Object.values(titles).join("\t")] : [];
+  results.push(
+    ...rows.map((row) =>
+      Object.keys(titles)
+        .map((key) => String(row[key as keyof T] ?? ""))
+        .join("\t")
+    )
+  );
+  return results.join("\n");
+}
