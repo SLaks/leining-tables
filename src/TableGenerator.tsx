@@ -4,6 +4,7 @@ import {
   Button,
   Card,
   CardContent,
+  Divider,
   FormControl,
   FormControlLabel,
   FormLabel,
@@ -11,6 +12,8 @@ import {
   RadioGroup,
   Stack,
   TextField,
+  ToggleButton,
+  ToggleButtonGroup,
 } from "@suid/material";
 import { generateRows, LeiningTableRow } from "./table-generator/table-data";
 import { getYearTypes } from "./logic/year-types";
@@ -58,46 +61,65 @@ export const TableGenerator: Component = () => {
       <Stack spacing={2} direction="row">
         <Card>
           <CardContent>
-            <FormControl>
-              <FormLabel id="demo-controlled-radio-buttons-group">
-                What to generate
-              </FormLabel>
-              <RadioGroup
-                aria-labelledby="demo-controlled-radio-buttons-group"
-                name="controlled-radio-buttons-group"
-                value={showYearSamples()}
-                onChange={(e) => setShowYearSamples(e.target.value === "true")}
+            <Stack spacing={2} direction="column">
+              <FormControl>
+                <FormLabel id="demo-controlled-radio-buttons-group">
+                  What to generate
+                </FormLabel>
+                <RadioGroup
+                  aria-labelledby="demo-controlled-radio-buttons-group"
+                  name="controlled-radio-buttons-group"
+                  value={showYearSamples()}
+                  onChange={(e) =>
+                    setShowYearSamples(e.target.value === "true")
+                  }
+                >
+                  <FormControlLabel
+                    value={true}
+                    control={<Radio />}
+                    label="One year of each configuration"
+                  />
+                  <FormControlLabel
+                    value={false}
+                    control={<Radio />}
+                    label="The following years"
+                  />
+                </RadioGroup>
+              </FormControl>
+              <Show when={!showYearSamples()}>
+                <Stack spacing={2} direction="column">
+                  <TextField
+                    label="Start year"
+                    type="number"
+                    variant="standard"
+                    value={startYear()}
+                    onChange={(event, value) =>
+                      setStartYear(parseInt(value, 10))
+                    }
+                  />
+                  <TextField
+                    label="Number of years"
+                    type="number"
+                    variant="standard"
+                    value={yearCount()}
+                    onChange={(event, value) =>
+                      setYearCount(parseInt(value, 10))
+                    }
+                  />
+                </Stack>
+              </Show>
+              <Divider flexItem />
+
+              <ToggleButtonGroup
+                color="primary"
+                value={isSephardic()}
+                exclusive
+                onChange={(event, value) => setSephardic(value)}
               >
-                <FormControlLabel
-                  value={true}
-                  control={<Radio />}
-                  label="One year of each configuration"
-                />
-                <FormControlLabel
-                  value={false}
-                  control={<Radio />}
-                  label="The following years"
-                />
-              </RadioGroup>
-            </FormControl>
-            <Show when={!showYearSamples()}>
-              <Stack spacing={2} direction="column">
-                <TextField
-                  label="Start year"
-                  type="number"
-                  variant="standard"
-                  value={startYear()}
-                  onChange={(event, value) => setStartYear(parseInt(value, 10))}
-                />
-                <TextField
-                  label="Number of years"
-                  type="number"
-                  variant="standard"
-                  value={yearCount()}
-                  onChange={(event, value) => setYearCount(parseInt(value, 10))}
-                />
-              </Stack>
-            </Show>
+                <ToggleButton value={false}>אשכנזי</ToggleButton>
+                <ToggleButton value={true}>ספרדי</ToggleButton>
+              </ToggleButtonGroup>
+            </Stack>
           </CardContent>
         </Card>
         <Card>
