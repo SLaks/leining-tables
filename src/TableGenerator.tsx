@@ -26,10 +26,6 @@ export const TableGenerator: Component = () => {
     "TableGenerator/isSephardic",
     false
   );
-  const [includeHaftaros, setIncludeHaftaros] = usePersistentState(
-    "TableGenerator/includeHaftaros",
-    true
-  );
   const [filter, setFilter] = usePersistentState<LeiningsFilter>(
     "TableGenerator/filter",
     {
