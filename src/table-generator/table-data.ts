@@ -52,6 +52,7 @@ export function generateRows(
       if (!o.fullkriyah) return {};
       return {
         sefer: getSefer(o.fullkriyah[1].k),
+        baalKoreh: "",
         length: leiningLength(o.fullkriyah),
       };
     }
@@ -59,6 +60,7 @@ export function generateRows(
       if (!haftara[0]) return {};
       return {
         haftara: toHebrewDisplay(haftara[0]),
+        haftaraBaalKoreh: "",
         haftaraSefer: getSefer(haftara[0].k),
         haftaraLength: leiningLength(haftara),
       };

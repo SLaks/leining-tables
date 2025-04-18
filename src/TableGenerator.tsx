@@ -26,9 +26,11 @@ const columnTitles: Record<keyof LeiningTableRow, string> = {
   date: "Date",
   hebrewDate: "Hebrew Date",
   title: "Title",
+  baalKoreh: "בעל קורא",
   sefer: "ספר",
   length: "# פסוקים",
   haftara: "הפטרה",
+  haftaraBaalKoreh: "הפטרה: בעל קורא",
   haftaraLength: "הפטרה: # פסוקים",
   haftaraSefer: "הפטרה: ספר",
 };
@@ -78,7 +80,7 @@ export const TableGenerator: Component = () => {
 
   return (
     <Stack spacing={2} direction="column" sx={{ padding: 2 }}>
-      <Stack spacing={2} direction="row">
+      <Stack spacing={2} direction="row" sx={{ maxHeight: "350px" }}>
         <Card>
           <CardContent>
             <Stack spacing={2} direction="column">
@@ -158,7 +160,7 @@ export const TableGenerator: Component = () => {
             }}
           />
         </Card>
-        <Card>
+        <Card sx={{ overflowY: "auto" }}>
           <CardContent sx={{ paddingBottom: 0 }}>
             <FormLabel id="demo-controlled-radio-buttons-group">
               Columns
