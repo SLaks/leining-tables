@@ -11,14 +11,14 @@ import { For } from "solid-js";
 
 export default function DataTable<T extends object>(props: {
   rows: T[];
-  titles: Record<string & keyof T, string>;
+  titles: { [K in keyof T]?: string };
 }) {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }}>
         <TableHead>
           <TableRow>
-            <For each={Object.values<string>(props.titles)}>
+            <For each={Object.values(props.titles as Record<string, string>)}>
               {(key) => (
                 <TableCell sx={{ fontWeight: "bold" }} component="th">
                   {key}

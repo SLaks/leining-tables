@@ -20,6 +20,7 @@ import { getYearTypes } from "./logic/year-types";
 import { getLeinings, LeiningsFilter } from "./table-generator/get-leinings";
 import DataTable from "./ui/DataTable";
 import CheckableOptions from "./ui/CheckableOptions";
+import { filterObject } from "./utils";
 
 const columnTitles: Record<keyof LeiningTableRow, string> = {
   date: "Date",
@@ -47,6 +48,12 @@ export const TableGenerator: Component = () => {
       israeli: false,
     }
   );
+  const [selectedColumns, setSelectedColumns] = usePersistentState(
+    "TableGenerator/selectedColumns",
+    Object.fromEntries(
+      Object.keys(columnTitles).map((key) => [key, true] as const)
+    ) as Record<keyof LeiningTableRow, boolean>
+  );
 
   const [showYearSamples, setShowYearSamples] = usePersistentState(
     "TableGenerator/showYearSamples",
@@ -61,6 +68,12 @@ export const TableGenerator: Component = () => {
     1
   );
 
+  const selectedColumnTitles = () =>
+    filterObject(
+      columnTitles,
+      (v, key) => selectedColumns()[key as keyof LeiningTableRow]
+    );
+
   const [table, setTable] = createSignal<LeiningTableRow[]>([]);
 
   return (
@@ -70,12 +83,9 @@ export const TableGenerator: Component = () => {
           <CardContent>
             <Stack spacing={2} direction="column">
               <FormControl>
-                <FormLabel id="demo-controlled-radio-buttons-group">
-                  What to generate
-                </FormLabel>
+                <FormLabel id="year-options">What to generate</FormLabel>
                 <RadioGroup
-                  aria-labelledby="demo-controlled-radio-buttons-group"
-                  name="controlled-radio-buttons-group"
+                  aria-labelledby="year-options"
                   value={showYearSamples()}
                   onChange={(e) =>
                     setShowYearSamples(e.target.value === "true")
@@ -131,6 +141,11 @@ export const TableGenerator: Component = () => {
           </CardContent>
         </Card>
         <Card>
+          <CardContent sx={{ paddingBottom: 0 }}>
+            <FormLabel id="demo-controlled-radio-buttons-group">
+              Include
+            </FormLabel>
+          </CardContent>
           <CheckableOptions
             options={filter()}
             setOptions={setFilter}
@@ -143,6 +158,18 @@ export const TableGenerator: Component = () => {
             }}
           />
         </Card>
+        <Card>
+          <CardContent sx={{ paddingBottom: 0 }}>
+            <FormLabel id="demo-controlled-radio-buttons-group">
+              Columns
+            </FormLabel>
+          </CardContent>
+          <CheckableOptions
+            options={selectedColumns()}
+            setOptions={setSelectedColumns}
+            titles={columnTitles}
+          />
+        </Card>
       </Stack>
       <Stack spacing={2} direction="row">
         <Button variant="contained" onclick={populateTable}>
@@ -151,7 +178,9 @@ export const TableGenerator: Component = () => {
         <Button variant="contained">Copy with headers</Button>
         <Button variant="contained">Copy without headers</Button>
       </Stack>
-      {table().length && <DataTable rows={table()} titles={columnTitles} />}
+      {table().length && (
+        <DataTable rows={table()} titles={selectedColumnTitles()} />
+      )}
     </Stack>
   );
 
