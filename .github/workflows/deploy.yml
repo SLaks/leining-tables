@@ -21,7 +21,11 @@ jobs:
 
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
-
+        # Ignore version conflict from @suid/vite-plugin's peer dependency.
+        # TODO: Delete after https://github.com/swordev/suid/issues/305
+        with:
+          install-command: npm ci --force
+      
       - name: Run lint and type checks
         run: npm run checks
       
