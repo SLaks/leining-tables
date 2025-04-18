@@ -31,7 +31,11 @@ const KlafIndex: Component = () => {
             {(k) => {
               return (
                 <li>
-                  <a class={styles.link} href={`/klaf-index/${k}`}>
+                  <a
+                    class={styles.link}
+                    href={`/klaf-index/${k}`}
+                    style={{ "font-weight": k === sefer() ? "bold" : "normal" }}
+                  >
                     {k}
                   </a>
                 </li>

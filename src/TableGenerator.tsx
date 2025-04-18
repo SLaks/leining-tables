@@ -111,6 +111,7 @@ export const TableGenerator: Component = () => {
                 value={isSephardic()}
                 exclusive
                 onChange={(event, value) => setSephardic(value)}
+                fullWidth
               >
                 <ToggleButton value={false}>אשכנזי</ToggleButton>
                 <ToggleButton value={true}>ספרדי</ToggleButton>
