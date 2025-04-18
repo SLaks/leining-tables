@@ -1,6 +1,17 @@
 import { HDate } from "@hebcal/core";
-import { Component, createSignal } from "solid-js";
-import { Button, Card, CardContent, Stack } from "@suid/material";
+import { Component, createSignal, Show } from "solid-js";
+import {
+  Button,
+  Card,
+  CardContent,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  Stack,
+  TextField,
+} from "@suid/material";
 import { generateRows, LeiningTableRow } from "./table-generator/table-data";
 import { getYearTypes } from "./logic/year-types";
 import { getLeinings, LeiningsFilter } from "./table-generator/get-leinings";
@@ -45,6 +56,50 @@ export const TableGenerator: Component = () => {
   return (
     <Stack spacing={2} direction="column" sx={{ padding: 2 }}>
       <Stack spacing={2} direction="row">
+        <Card>
+          <CardContent>
+            <FormControl>
+              <FormLabel id="demo-controlled-radio-buttons-group">
+                What to generate
+              </FormLabel>
+              <RadioGroup
+                aria-labelledby="demo-controlled-radio-buttons-group"
+                name="controlled-radio-buttons-group"
+                value={showYearSamples()}
+                onChange={(e) => setShowYearSamples(e.target.value === "true")}
+              >
+                <FormControlLabel
+                  value={true}
+                  control={<Radio />}
+                  label="One year of each configuration"
+                />
+                <FormControlLabel
+                  value={false}
+                  control={<Radio />}
+                  label="The following years"
+                />
+              </RadioGroup>
+            </FormControl>
+            <Show when={!showYearSamples()}>
+              <Stack spacing={2} direction="column">
+                <TextField
+                  label="Start year"
+                  type="number"
+                  variant="standard"
+                  value={startYear()}
+                  onChange={(event, value) => setStartYear(parseInt(value, 10))}
+                />
+                <TextField
+                  label="Number of years"
+                  type="number"
+                  variant="standard"
+                  value={yearCount()}
+                  onChange={(event, value) => setYearCount(parseInt(value, 10))}
+                />
+              </Stack>
+            </Show>
+          </CardContent>
+        </Card>
         <Card>
           <CheckableOptions
             options={filter()}
