@@ -21,6 +21,17 @@ import { getLeinings, LeiningsFilter } from "./table-generator/get-leinings";
 import DataTable from "./ui/DataTable";
 import CheckableOptions from "./ui/CheckableOptions";
 
+const columnTitles: Record<keyof LeiningTableRow, string> = {
+  date: "Date",
+  hebrewDate: "Hebrew Date",
+  title: "Title",
+  sefer: "ספר",
+  length: "# פסוקים",
+  haftara: "הפטרה",
+  haftaraLength: "הפטרה: # פסוקים",
+  haftaraSefer: "הפטרה: ספר",
+};
+
 export const TableGenerator: Component = () => {
   const [isSephardic, setSephardic] = usePersistentState(
     "TableGenerator/isSephardic",
@@ -140,7 +151,7 @@ export const TableGenerator: Component = () => {
         <Button variant="contained">Copy with headers</Button>
         <Button variant="contained">Copy without headers</Button>
       </Stack>
-      {table().length && <DataTable rows={table()} />}
+      {table().length && <DataTable rows={table()} titles={columnTitles} />}
     </Stack>
   );
 
