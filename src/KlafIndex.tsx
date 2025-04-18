@@ -1,4 +1,4 @@
-import { For, type Component } from "solid-js";
+import { For, Show, type Component } from "solid-js";
 
 import styles from "./KlafIndex.module.css";
 import { getAllHaftaros } from "./logic/haftaros";
@@ -17,7 +17,7 @@ const firstPasuk = query(getFirstPasuk, "firstPasuk");
 
 const KlafIndex: Component = () => {
   const params = useParams();
-  const sefer = () => decodeURIComponent(params.sefer);
+  const sefer = () => params.sefer && decodeURIComponent(params.sefer);
 
   const haftaros = () =>
     bySefer[sefer()]?.sort(byValue(toSortableIndex, byNumber()));
@@ -39,7 +39,9 @@ const KlafIndex: Component = () => {
             }}
           </For>
         </ul>
-        <h2>Sefer: {sefer()}</h2>
+        <Show when={sefer()}>
+          <h2>Sefer: {sefer()}</h2>
+        </Show>
       </header>
       <ol class={styles.List} dir="rtl">
         {
