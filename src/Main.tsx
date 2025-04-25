@@ -58,6 +58,28 @@ const Main: Component = () => {
               </CardContent>
             </CardActionArea>
           </Card>
+          <Card>
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                About
+              </Typography>
+              <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                <p>
+                  All data comes from{" "}
+                  <a target="_blank" href="https://www.hebcal.com/home/about">
+                    Hebcal
+                  </a>
+                  .
+                </p>
+                <p dir="rtl">
+                  לעילוי נשמת{" "}
+                  <a target="_blank" href="https://www.drleff.org/">
+                    נתן חיים בן אריה
+                  </a>
+                </p>
+              </Typography>
+            </CardContent>
+          </Card>
         </div>
       </header>
     </div>
