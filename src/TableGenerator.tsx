@@ -118,6 +118,7 @@ export const TableGenerator: Component = () => {
                     label="Start year"
                     type="number"
                     variant="standard"
+                    inputProps={{ min: 5000, max: 6000 }}
                     value={startYear()}
                     onChange={(event, value) =>
                       setStartYear(parseInt(value, 10))
@@ -127,6 +128,7 @@ export const TableGenerator: Component = () => {
                     label="Number of years"
                     type="number"
                     variant="standard"
+                    inputProps={{ min: 1, max: 30 }}
                     value={yearCount()}
                     onChange={(event, value) =>
                       setYearCount(parseInt(value, 10))
