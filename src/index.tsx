@@ -7,6 +7,15 @@ import { Route, Router } from "@solidjs/router";
 import KlafIndex from "./KlafIndex";
 import { TableGenerator } from "./TableGenerator";
 import { Locale } from "@hebcal/core";
+import { green, purple } from "@suid/material/colors";
+import { createTheme, ThemeProvider } from "@suid/material/styles";
+
+const theme = createTheme({
+  palette: {
+    primary: { main: purple[500] },
+    secondary: { main: green[500] },
+  },
+});
 
 const root = document.getElementById("root");
 
@@ -20,11 +29,13 @@ Locale.useLocale("he-x-nonikud");
 
 render(
   () => (
-    <Router>
-      <Route path="/" component={Main} />
-      <Route path="/klaf-index/:sefer?" component={KlafIndex} />
-      <Route path="/generate-table" component={TableGenerator} />
-    </Router>
+    <ThemeProvider theme={theme}>
+      <Router>
+        <Route path="/" component={Main} />
+        <Route path="/klaf-index/:sefer?" component={KlafIndex} />
+        <Route path="/generate-table" component={TableGenerator} />
+      </Router>
+    </ThemeProvider>
   ),
   root
 );
