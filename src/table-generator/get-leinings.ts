@@ -44,6 +44,7 @@ export function getLeinings(
               : opts.includeCholHamoed;
           if (h.mask & flags.MAJOR_FAST) return opts.includeFastDays;
           if (h.mask & flags.MINOR_FAST) return opts.includeFastDays;
+          return false;
         })
       )
         continue;
