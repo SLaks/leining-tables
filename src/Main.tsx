@@ -64,19 +64,31 @@ const Main: Component = () => {
                 About
               </Typography>
               <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                <p>
-                  All data comes from{" "}
-                  <a target="_blank" href="https://www.hebcal.com/home/about">
-                    Hebcal
-                  </a>
-                  .
-                </p>
-                <p dir="rtl">
+                <ul>
+                  <li>
+                    All data comes from{" "}
+                    <a target="_blank" href="https://www.hebcal.com/home/about">
+                      Hebcal
+                    </a>
+                    .
+                  </li>
+                  <li>
+                    See{" "}
+                    <a
+                      target="_blank"
+                      href="https://github.com/SLaks/leining-tables"
+                    >
+                      source on GitHub
+                    </a>
+                    .
+                  </li>
+                </ul>
+                <div dir="rtl" style={{ "text-align": "center" }}>
                   לעילוי נשמת{" "}
                   <a target="_blank" href="https://www.drleff.org/">
-                    נתן חיים בן אריה
+                    נתן חיים בן אריה ז״ל
                   </a>
-                </p>
+                </div>
               </Typography>
             </CardContent>
           </Card>
