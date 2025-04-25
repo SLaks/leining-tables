@@ -12,6 +12,7 @@ import {
   RadioGroup,
   Stack,
   TextField,
+  Theme,
   ToggleButton,
   ToggleButtonGroup,
 } from "@suid/material";
@@ -21,6 +22,7 @@ import { getLeinings, LeiningsFilter } from "./table-generator/get-leinings";
 import DataTable from "./ui/DataTable";
 import CheckableOptions from "./ui/CheckableOptions";
 import { filterObject, toTsv } from "./utils";
+import { SxProps } from "@suid/system";
 
 const columnTitles: Record<keyof LeiningTableRow, string> = {
   date: "Date",
@@ -78,10 +80,15 @@ export const TableGenerator: Component = () => {
 
   const [table, setTable] = createSignal<LeiningTableRow[]>([]);
 
+  const cardStyles: SxProps<Theme> = {
+    maxHeight: 350,
+    flexGrow: 1,
+  };
+
   return (
     <Stack spacing={2} direction="column" sx={{ padding: 2 }}>
-      <Stack spacing={2} direction="row" sx={{ maxHeight: "350px" }}>
-        <Card>
+      <Stack direction="row" flexWrap="wrap" gap={2}>
+        <Card sx={cardStyles}>
           <CardContent>
             <Stack spacing={2} direction="column">
               <FormControl>
@@ -142,7 +149,7 @@ export const TableGenerator: Component = () => {
             </Stack>
           </CardContent>
         </Card>
-        <Card>
+        <Card sx={cardStyles}>
           <CardContent sx={{ paddingBottom: 0 }}>
             <FormLabel id="demo-controlled-radio-buttons-group">
               Include
@@ -160,7 +167,7 @@ export const TableGenerator: Component = () => {
             }}
           />
         </Card>
-        <Card sx={{ overflowY: "auto" }}>
+        <Card sx={{ overflowY: "auto", ...cardStyles }}>
           <CardContent sx={{ paddingBottom: 0 }}>
             <FormLabel id="demo-controlled-radio-buttons-group">
               Columns
