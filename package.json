@@ -30,6 +30,7 @@
     "@solidjs/router": "^0.15.3",
     "@suid/icons-material": "^0.8.1",
     "@suid/material": "^0.18.0",
+    "lru-cache": "^11.1.0",
     "solid-js": "^1.9.5",
     "sort-es": "^1.7.14"
   }
