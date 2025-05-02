@@ -3,6 +3,7 @@ import { LeiningInfo } from "./get-leinings";
 import { Aliyah, AliyotMap } from "@hebcal/leyning";
 import { getSefer, toHebrewDisplay } from "../names";
 import { flags } from "@hebcal/core/dist/esm/event";
+import { getHaftaraTitle } from "../logic/haftaros";
 
 export type LeiningTableRow = ReturnType<typeof generateRows>[number];
 
@@ -63,6 +64,7 @@ export function generateRows(
         haftaraBaalKoreh: "",
         haftaraSefer: getSefer(haftara[0].k),
         haftaraLength: leiningLength(haftara),
+        haftaraTitle: () => getHaftaraTitle(haftara[0]),
       };
     }
   });

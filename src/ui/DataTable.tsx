@@ -7,12 +7,12 @@ import {
   TableHead,
   TableRow,
 } from "@suid/material";
-import { For } from "solid-js";
+import { createSignal, For } from "solid-js";
+import { ColumnValue } from "../utils";
 
-export default function DataTable<T extends object>(props: {
-  rows: T[];
-  titles: { [K in keyof T]?: string };
-}) {
+export default function DataTable<
+  T extends Record<string, ColumnValue>
+>(props: { rows: T[]; titles: { [K in keyof T]?: string } }) {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }}>
@@ -34,7 +34,7 @@ export default function DataTable<T extends object>(props: {
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <For each={Object.keys(props.titles) as (keyof T)[]}>
-                  {(key) => <TableCell>{String(row[key] ?? "")}</TableCell>}
+                  {(key) => <TableCell>{renderCell(row[key])}</TableCell>}
                 </For>
               </TableRow>
             )}
@@ -43,4 +43,16 @@ export default function DataTable<T extends object>(props: {
       </Table>
     </TableContainer>
   );
+}
+
+function renderCell(value: ColumnValue) {
+  if (!value) return "";
+  if (typeof value === "function") value = value();
+
+  if (value instanceof Promise) {
+    const [result, setResult] = createSignal<string | undefined>("");
+    value.then(setResult);
+    return <>{result()}</>;
+  }
+  return value;
 }

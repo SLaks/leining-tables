@@ -31,6 +31,7 @@ const columnTitles: Record<keyof LeiningTableRow, string> = {
   baalKoreh: "בעל קורא",
   sefer: "ספר",
   length: "# פסוקים",
+  haftaraTitle: "שם הפטרה",
   haftara: "הפטרה",
   haftaraBaalKoreh: "הפטרה: בעל קורא",
   haftaraLength: "הפטרה: # פסוקים",
@@ -207,8 +208,10 @@ export const TableGenerator: Component = () => {
     </Stack>
   );
 
-  function copyTable(opts: { includeTitles: boolean }) {
-    navigator.clipboard.writeText(toTsv(selectedColumnTitles(), table(), opts));
+  async function copyTable(opts: { includeTitles: boolean }) {
+    navigator.clipboard.writeText(
+      await toTsv(selectedColumnTitles(), table(), opts)
+    );
   }
 
   function getSelectedLeinings() {
