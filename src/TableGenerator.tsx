@@ -188,12 +188,14 @@ export const TableGenerator: Component = () => {
         </Button>
         <Button
           variant="contained"
+          disabled={!table().length}
           onclick={[copyTable, { includeTitles: true }]}
         >
           Copy with headers
         </Button>
         <Button
           variant="contained"
+          disabled={!table().length}
           onclick={[copyTable, { includeTitles: false }]}
         >
           Copy without headers
