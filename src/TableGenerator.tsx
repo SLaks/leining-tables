@@ -23,6 +23,7 @@ import DataTable from "./ui/DataTable";
 import CheckableOptions from "./ui/CheckableOptions";
 import { filterObject, toTsv } from "./utils";
 import { SxProps } from "@suid/system";
+import { AsyncButton } from "./ui/AsyncButton";
 
 const columnTitles: Record<keyof LeiningTableRow, string> = {
   date: "Date",
@@ -187,20 +188,18 @@ export const TableGenerator: Component = () => {
         <Button variant="contained" onclick={populateTable}>
           Render Table
         </Button>
-        <Button
-          variant="contained"
+        <AsyncButton
           disabled={!table().length}
-          onclick={[copyTable, { includeTitles: true }]}
+          action={() => copyTable({ includeTitles: true })}
         >
           Copy with headers
-        </Button>
-        <Button
-          variant="contained"
+        </AsyncButton>
+        <AsyncButton
           disabled={!table().length}
-          onclick={[copyTable, { includeTitles: false }]}
+          action={() => copyTable({ includeTitles: false })}
         >
           Copy without headers
-        </Button>
+        </AsyncButton>
       </Stack>
       {table().length && (
         <DataTable rows={table()} titles={selectedColumnTitles()} />
