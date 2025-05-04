@@ -12,6 +12,7 @@ export default function CheckableOptions<T extends string>(props: {
   options: Record<T, boolean>;
   setOptions: (options: Record<T, boolean>) => void;
   titles: Record<T, string>;
+  descriptions?: Partial<Record<T, string>>;
 }) {
   return (
     <List>
@@ -39,7 +40,11 @@ export default function CheckableOptions<T extends string>(props: {
                     inputProps={{ "aria-labelledby": labelId }}
                   />
                 </ListItemIcon>
-                <ListItemText id={labelId} primary={title} />
+                <ListItemText
+                  id={labelId}
+                  primary={title}
+                  secondary={props.descriptions?.[key]}
+                />
               </ListItemButton>
             </ListItem>
           );

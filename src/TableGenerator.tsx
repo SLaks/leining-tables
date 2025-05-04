@@ -36,7 +36,7 @@ const columnTitles: Record<keyof LeiningTableRow, string> = {
   haftara: "הפטרה",
   haftaraBaalKoreh: "הפטרה: בעל קורא",
   haftaraLength: "הפטרה: # פסוקים",
-  haftaraSefer: "הפטרה: ספר",
+  haftaraSefer: "הפטרה: קלף",
 };
 
 export const TableGenerator: Component = () => {
@@ -181,6 +181,10 @@ export const TableGenerator: Component = () => {
             options={selectedColumns()}
             setOptions={setSelectedColumns}
             titles={columnTitles}
+            descriptions={{
+              length:
+                "This always includes מפטיר, so it's larger than the length of the פרשה",
+            }}
           />
         </Card>
       </Stack>
