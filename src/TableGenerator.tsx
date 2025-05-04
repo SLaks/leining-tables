@@ -24,6 +24,7 @@ import CheckableOptions from "./ui/CheckableOptions";
 import { filterObject, toTsv } from "./utils";
 import { SxProps } from "@suid/system";
 import { AsyncButton } from "./ui/AsyncButton";
+import { usePersistentState } from "./ui/usePersistentState";
 
 const columnTitles: Record<keyof LeiningTableRow, string> = {
   date: "Date",
@@ -231,18 +232,4 @@ export const TableGenerator: Component = () => {
   }
 };
 
-function usePersistentState<T>(name: string, initialValue: T) {
-  const storedValue = localStorage.getItem(name);
-  const [state, setState] = createSignal<T>(
-    storedValue ? (JSON.parse(storedValue) as T) : initialValue,
-    { name }
-  );
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-  const setPersistentState = (value: Exclude<T, Function>) => {
-    localStorage.setItem(name, JSON.stringify(value));
-    setState(value);
-  };
-
-  return [state, setPersistentState] as const;
-}
