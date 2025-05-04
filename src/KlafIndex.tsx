@@ -62,12 +62,12 @@ const HaftaraDisplay: Component<{ h: Aliyah }> = (props) => {
   const preview = createAsync(() => getHaftaraTitle(props.h));
 
   return (
-    <>
+    <div class={styles.ListEntry}>
       <span class={styles.Location}>
         {formatHebrewRange(props.h)}:{"\t"}
       </span>
       <span class={styles.Pasuk}> {preview()}</span>
-    </>
+    </div>
   );
 };
 

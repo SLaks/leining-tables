@@ -18,15 +18,30 @@
   .link {
     color: #e1bee7;
   }
+  @media print {
+    display: none;
+  }
 }
 .List {
   margin: 16px;
   font-size: 20px;
+  li {
+    margin-bottom: .3em;
+  }
+}
+.ListEntry {
+  display: flex;
+
   .Location {
     font-size: 16px;
     display: inline-block;
     width: 5em;
     color: #4a148c;
+    flex-shrink: 0;
+    @media screen and (max-width: 400px) {
+      width: 4em;
+      
+    }
   }
   .Pasuk {
     font-family: ShlomosemiStam;
