@@ -7,6 +7,7 @@ import {
   formatHebrewLocation,
   getSefer,
   toHebrew,
+  toSefariaUrl,
   toSortableIndex,
 } from "./names";
 import { createAsync, useParams } from "@solidjs/router";
@@ -48,6 +49,9 @@ const KlafIndex: Component = () => {
       <header class={styles.Header}>
         <ThemeProvider theme={darkTheme}>
           <h1>Klaf Index</h1>
+          <a class={styles.link} href="/">
+            Home
+          </a>
           <p>Click on a klaf to see the haftaros for that klaf.</p>
           <ul>
             <For each={Object.keys(bySefer())}>
@@ -57,6 +61,7 @@ const KlafIndex: Component = () => {
                     <a
                       class={styles.link}
                       href={`/klaf-index/${k}`}
+                      replace
                       style={{
                         "font-weight": k === sefer() ? "bold" : "normal",
                       }}
@@ -110,9 +115,9 @@ const HaftaraDisplay: Component<{ h: Aliyah }> = (props) => {
 
   return (
     <div class={styles.ListEntry}>
-      <span class={styles.Location}>
+      <a class={styles.Location} href={toSefariaUrl(props.h)} target="_blank">
         {prefix()} {formatHebrewLocation(props.h)}:{"\t"}
-      </span>
+      </a>
       <span class={styles.Pasuk}> {preview()}</span>
     </div>
   );
