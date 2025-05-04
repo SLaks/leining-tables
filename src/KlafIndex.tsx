@@ -2,7 +2,13 @@ import { For, Show, type Component } from "solid-js";
 
 import styles from "./KlafIndex.module.css";
 import { getAllHaftaros, getHaftaraTitle } from "./logic/haftaros";
-import { formatHebrewRange, getSefer, toSortableIndex } from "./names";
+import {
+  fixSeferSuffix,
+  formatHebrewLocation,
+  getSefer,
+  toHebrew,
+  toSortableIndex,
+} from "./names";
 import { createAsync, useParams } from "@solidjs/router";
 import { byNumber, byValue } from "sort-es";
 import { Aliyah } from "@hebcal/leyning";
@@ -61,10 +67,17 @@ const KlafIndex: Component = () => {
 const HaftaraDisplay: Component<{ h: Aliyah }> = (props) => {
   const preview = createAsync(() => getHaftaraTitle(props.h));
 
+  const prefix = () => {
+    const fullSefer = toHebrew(props.h.k);
+    const shortSefer = getSefer(props.h.k);
+    if (shortSefer == fullSefer) return "";
+    return fixSeferSuffix(fullSefer).replace(shortSefer, "").trim();
+  };
+
   return (
     <div class={styles.ListEntry}>
       <span class={styles.Location}>
-        {formatHebrewRange(props.h)}:{"\t"}
+        {prefix()} {formatHebrewLocation(props.h)}:{"\t"}
       </span>
       <span class={styles.Pasuk}> {preview()}</span>
     </div>

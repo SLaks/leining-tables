@@ -39,9 +39,9 @@ export function fixSeferSuffix(name: string) {
 }
 
 export function toHebrewDisplay(h: Aliyah) {
-  return fixSeferSuffix(toHebrew(h.k)) + " " + formatHebrewRange(h);
+  return fixSeferSuffix(toHebrew(h.k)) + " " + formatHebrewLocation(h);
 }
-export function formatHebrewRange(h: Aliyah) {
+export function formatHebrewLocation(h: Aliyah) {
   return h.b.split(":").map(gematriya).join(" ");
 }
 
