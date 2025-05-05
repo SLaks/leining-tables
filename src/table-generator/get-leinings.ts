@@ -42,6 +42,9 @@ export function getLeinings(
             return date.getDate() === 6
               ? opts.includeYomTov
               : opts.includeCholHamoed;
+
+          // All other holidays do not affect פרשיות.
+          if (date.getDay() === 6) return opts.includeParshiyos;
           if (h.mask & flags.MAJOR_FAST) return opts.includeFastDays;
           if (h.mask & flags.MINOR_FAST) return opts.includeFastDays;
           return false;
