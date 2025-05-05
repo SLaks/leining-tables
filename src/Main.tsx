@@ -22,14 +22,22 @@ const Main: Component = () => {
               />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
-                  Generate Leining Tables
+                  Generate spreadsheet of leinings
                 </Typography>
                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  <p>Generate a table of leinings for one or more years.</p>
                   <p>
-                    Use this to set up a leining tracker spreadsheet, or to
-                    analyze leinings in pivot tables.
+                    Generate a table listing every leining for one or more
+                    years.
                   </p>
+                  <ul>
+                    <li>
+                      Use this to set up a spreadsheet to track who is leining.
+                    </li>
+                    <li>
+                      You can also use this to analyze leinings using advanced
+                      spreadsheet features.
+                    </li>
+                  </ul>
                 </Typography>
               </CardContent>
             </CardActionArea>
