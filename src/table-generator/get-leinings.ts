@@ -39,7 +39,7 @@ export function getLeinings(
         !holidays?.some((h) => {
           if (h.mask & flags.CHAG) return opts.includeYomTov;
           if (h.mask & flags.CHOL_HAMOED)
-            return date.getDate() === 6
+            return date.getDay() === 6
               ? opts.includeYomTov
               : opts.includeCholHamoed;
 
