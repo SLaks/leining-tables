@@ -33,6 +33,14 @@ export function getSefer(name: string) {
   if (treiAsar.includes(name)) return "תרי עשר";
   return name.replace(/ראשון|שני/, "").trim();
 }
+export function getSeferSortIndex(name: string) {
+  name = toHebrew(name);
+  const treiAsarIndex = treiAsar.indexOf(name);
+  if (treiAsarIndex >= 0) return treiAsarIndex;
+  if (name in chumash) return Object.keys(chumash).indexOf(name);
+  if (name.includes("שני")) return 2;
+  return 1;
+}
 
 export function fixSeferSuffix(name: string) {
   return name.replace("ראשון", "א׳").replace("שני", "ב׳");

@@ -6,12 +6,13 @@ import {
   fixSeferSuffix,
   formatHebrewLocation,
   getSefer,
+  getSeferSortIndex,
   toHebrew,
   toSefariaUrl,
   toSortableIndex,
 } from "./names";
 import { createAsync, useParams } from "@solidjs/router";
-import { byNumber, byValue } from "sort-es";
+import { byNumber, byValues } from "sort-es";
 import { Aliyah } from "@hebcal/leyning";
 import { usePersistentState } from "./ui/usePersistentState";
 import {
@@ -43,7 +44,13 @@ const KlafIndex: Component = () => {
   const bySefer = () => Object.groupBy(allHaftaros(), (h) => getSefer(h.k));
 
   const haftaros = () =>
-    bySefer()[sefer()]?.sort(byValue(toSortableIndex, byNumber()));
+    bySefer()[sefer()]?.sort(
+      byValues([
+        // First, sort by sub-book (for תרי עשר or I/II).
+        [(h) => getSeferSortIndex(h.k), byNumber()],
+        [toSortableIndex, byNumber()],
+      ])
+    );
   return (
     <div class={styles.Root}>
       <header class={styles.Header}>
