@@ -55,6 +55,7 @@ export function getLeinings(
       results.push(
         ...getLeyningOnDate(date, opts.israeli, true)
           .filter((o): o is Leyning => !o.weekday)
+          .filter((o): o is Leyning => o.fullkriyah)
           .map((o) => ({ ...o, date, holidays }))
       );
     }
