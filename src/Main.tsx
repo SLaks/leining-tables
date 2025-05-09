@@ -34,8 +34,8 @@ const Main: Component = () => {
                       Use this to set up a spreadsheet to track who is leining.
                     </li>
                     <li>
-                      You can also use this to analyze leinings using advanced
-                      spreadsheet features.
+                      You can also paste into a spreadsheet to analyze leinings
+                      using advanced spreadsheet features.
                     </li>
                   </ul>
                 </Typography>
