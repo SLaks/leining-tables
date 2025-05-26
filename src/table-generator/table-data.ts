@@ -7,13 +7,31 @@ import { getHaftaraTitle } from "../logic/haftaros";
 
 export type LeiningTableRow = ReturnType<typeof generateRows>[number];
 
+const days = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "בשבת",
+];
+
 export function generateRows(
   leinings: LeiningInfo[],
   { sephardic }: { sephardic: boolean }
 ) {
   return leinings.map((o) => {
     let title = Locale.hebrewStripNikkud(o.name.he ?? "TODO: unknown");
-    if (o.parsha) {
+    // Minorx fixes for יום טוב titles:
+    if (!o.parsha) {
+      // Fix the word order for שבת חול המועד.
+      title = title.replace(/([א-ת]+) שבת חול המועד/, "שבת חול המועד $1");
+      // Fix ערב שמחת תורה.
+      title = title.replace("ערב ", "ליל ");
+      // Add day of week if not already present.
+      if (!title.includes("שבת")) title += ` (${days[o.date.getDay()]})`;
+    } else {
       title = `פרשת ${title}`;
       // There is no HolidayEvent for מחר חודש, so we add it manually.
       // It does appear in .reason strings, but those are too verbose.

@@ -3,6 +3,7 @@ import { getLeinings } from "./get-leinings";
 import { generateRows } from "./table-data";
 import { getYearTypes } from "../logic/year-types";
 
+// Run with [Console]::OutputEncoding = [Text.UTF8Encoding]::UTF8
 stdout.setEncoding("utf8");
 
 stdout.write(
@@ -13,14 +14,12 @@ stdout.write(
           getLeinings([...getYearTypes().values()], {
             includeParshiyos: true,
             includeYomTov: true,
-            includeCholHamoed: false,
-            includeFastDays: false,
+            includeCholHamoed: true,
+            includeFastDays: true,
             israeli: false,
           }),
           { sephardic: false }
-        )
-          .filter((o) => o.title.includes("("))
-          .map((o) => o.title)
+        ).map((o) => o.title)
       ),
     ],
     null,
