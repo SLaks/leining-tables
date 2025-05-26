@@ -30,7 +30,8 @@ export function generateRows(
       // Fix ערב שמחת תורה.
       title = title.replace("ערב ", "ליל ");
       // Add day of week if not already present.
-      if (!title.includes("שבת")) title += ` (${days[o.date.getDay()]})`;
+      if (!o.isMegillah && !title.includes("שבת"))
+        title += ` (${days[o.date.getDay()]})`;
     } else {
       title = `פרשת ${title}`;
       // There is no HolidayEvent for מחר חודש, so we add it manually.
@@ -64,7 +65,6 @@ export function generateRows(
 
       ...mainInfo(),
       ...haftaraInfo(),
-      // TODO: מגילה
     };
 
     function mainInfo() {

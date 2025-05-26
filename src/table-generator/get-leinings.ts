@@ -5,7 +5,7 @@ import {
   HolidayEvent,
   months,
 } from "@hebcal/core";
-import { Leyning, getLeyningOnDate } from "@hebcal/leyning";
+import { Leyning, getLeyningOnDate, makeLeyningNames } from "@hebcal/leyning";
 
 export interface LeiningsFilter {
   includeParshiyos: boolean;
@@ -18,6 +18,7 @@ export interface LeiningsFilter {
 export interface LeiningInfo extends Leyning {
   date: HDate;
   holidays?: HolidayEvent[];
+  isMegillah?: boolean;
 }
 
 export function getLeinings(
@@ -55,7 +56,18 @@ export function getLeinings(
       results.push(
         ...getLeyningOnDate(date, opts.israeli, true)
           .filter((o): o is Leyning => !o.weekday)
-          .filter((o) => !!o.fullkriyah)
+          .flatMap((o) => {
+            const result = [];
+            if (o.fullkriyah) result.push(o);
+            if (o.megillah)
+              result.push({
+                ...o,
+                fullkriyah: o.megillah,
+                name: makeLeyningNames([o.megillah[1].k]),
+                isMegillah: true,
+              });
+            return result;
+          })
           .map((o) => ({ ...o, date, holidays }))
       );
     }
