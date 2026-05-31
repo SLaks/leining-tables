@@ -17,7 +17,6 @@ import { usePersistentState } from "./ui/usePersistentState";
 import { gematriya, Locale } from "@hebcal/core";
 import { toHebrew, toSefariaUrl } from "./names";
 import styles from "./LeiningQuiz.module.css";
-import { purple } from "@suid/material/colors";
 import { getAllHaftaros } from "./logic/haftaros";
 import { fetchRefVerses, type Pasuk } from "./logic/sefaria";
 import parshaJson from "@hebcal/leyning/dist/esm/aliyot.json";
@@ -40,10 +39,11 @@ const ChumashBooks = [
   "Deuteronomy",
 ];
 
-const lightTheme = createTheme({
+const darkTheme = createTheme({
   palette: {
-    mode: "light",
-    primary: { main: purple[700] },
+    mode: "dark",
+    primary: { main: "#dfb15b" },
+    secondary: { main: "#ffd700" },
   },
 });
 
@@ -78,25 +78,29 @@ function getHaftaraContext(h: Aliyah, isSeph: boolean): string {
 const LeiningQuiz: Component = () => {
   const [isSephardic, setSephardic] = usePersistentState(
     "TableGenerator/isSephardic",
-    false
+    false,
   );
   const [includeParshiyos, setIncludeParshiyos] = usePersistentState(
     "LeiningQuiz/includeParshiyos",
-    true
+    true,
   );
   const [includeHaftaros, setIncludeHaftaros] = usePersistentState(
     "LeiningQuiz/includeHaftaros",
-    true
+    true,
   );
   const [showNikud, setShowNikud] = usePersistentState(
     "LeiningQuiz/showNikud",
-    true
+    true,
   );
 
   const [selectedPasuk, setSelectedPasuk] = createSignal<Pasuk | null>(null);
   const [showAnswer, setShowAnswer] = createSignal(false);
   const [loading, setLoading] = createSignal(false);
   const [error, setError] = createSignal("");
+
+  // History stack navigation
+  const [history, setHistory] = createSignal<Pasuk[]>([]);
+  const [historyIndex, setHistoryIndex] = createSignal(-1);
 
   const getPortionsList = (): Portion[] => {
     const portions: Portion[] = [];
@@ -142,17 +146,52 @@ const LeiningQuiz: Component = () => {
     setShowAnswer(false);
 
     try {
-      const randomPortion = portions[Math.floor(Math.random() * portions.length)];
-      const verses = await fetchRefVerses(randomPortion.ref, randomPortion.hebrewName);
+      const randomPortion =
+        portions[Math.floor(Math.random() * portions.length)];
+      const verses = await fetchRefVerses(
+        randomPortion.ref,
+        randomPortion.hebrewName,
+      );
       if (verses.length === 0) {
         throw new Error("לא נמצאו פסוקים בקטע שנבחר.");
       }
       const randomVerse = verses[Math.floor(Math.random() * verses.length)];
+
+      // Add to history stack
+      const currentHistory = history();
+      const nextIndex = historyIndex() + 1;
+      const newHistory = [...currentHistory.slice(0, nextIndex), randomVerse];
+      setHistory(newHistory);
+      setHistoryIndex(nextIndex);
+
       setSelectedPasuk(randomVerse);
     } catch (err) {
-      setError("שגיאה בטעינת הפסוק: " + (err instanceof Error ? err.message : String(err)));
+      setError(
+        "שגיאה בטעינת הפסוק: " +
+          (err instanceof Error ? err.message : String(err)),
+      );
     } finally {
       setLoading(false);
+    }
+  };
+
+  const goBack = () => {
+    if (historyIndex() > 0) {
+      const nextIndex = historyIndex() - 1;
+      setHistoryIndex(nextIndex);
+      setSelectedPasuk(history()[nextIndex]);
+      setShowAnswer(false);
+    }
+  };
+
+  const goForward = async () => {
+    if (historyIndex() < history().length - 1) {
+      const nextIndex = historyIndex() + 1;
+      setHistoryIndex(nextIndex);
+      setSelectedPasuk(history()[nextIndex]);
+      setShowAnswer(false);
+    } else {
+      await pickNewPasuk();
     }
   };
 
@@ -169,139 +208,209 @@ const LeiningQuiz: Component = () => {
   };
 
   const sefariaUrl = (v: Pasuk) => {
-    return toSefariaUrl({ k: v.book, b: `${v.chapter}:${v.verse}`, e: "" } as Aliyah);
+    return toSefariaUrl({
+      k: v.book,
+      b: `${v.chapter}:${v.verse}`,
+      e: "",
+    } as Aliyah);
   };
 
   return (
-    <div class={styles.Root}>
-      <header class={styles.Header}>
-        <h1>Leining Quiz</h1>
-        <a class={styles.link} href="/">
-          Home
-        </a>
-      </header>
+    <ThemeProvider theme={darkTheme}>
+      <div class={styles.Root}>
+        {/* Main Header */}
+        <header class={styles.Header}>
+          <h1 class={styles.MainTitle}>LEINING QUIZ</h1>
 
-      <div class={styles.ContentWrapper}>
-        <aside class={styles.SettingsSidebar}>
-          <ThemeProvider theme={lightTheme}>
+          {/* Home Link */}
+          <a class={styles.HomeLink} href="/">
+            ← Home
+          </a>
+        </header>
 
-            <PronunciationToggle
-              value={isSephardic()}
-              onChange={(v) => {
-                setSephardic(v);
-                pickNewPasuk();
-              }}
-            />
-
-            <Stack  sx={{ mt: 2 }} dir="rtl">
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={includeParshiyos()}
-                    onChange={(e, checked) => {
-                      setIncludeParshiyos(checked);
-                      pickNewPasuk();
-                    }}
-                  />
-                }
-                label="פרשיות"
+        {/* Minimalist settings row */}
+        <div class={styles.OptionsRow}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={includeParshiyos()}
+                onChange={(e, checked) => {
+                  setIncludeParshiyos(checked);
+                  pickNewPasuk();
+                }}
+                sx={{ color: "#dfb15b", "&.Mui-checked": { color: "#dfb15b" } }}
               />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={includeHaftaros()}
-                    onChange={(e, checked) => {
-                      setIncludeHaftaros(checked);
-                      pickNewPasuk();
-                    }}
-                  />
-                }
-                label="הפטרות"
+            }
+            label={<span class={styles.GoldLabel}>פרשיות</span>}
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={includeHaftaros()}
+                onChange={(e, checked) => {
+                  setIncludeHaftaros(checked);
+                  pickNewPasuk();
+                }}
+                sx={{ color: "#dfb15b", "&.Mui-checked": { color: "#dfb15b" } }}
               />
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={showNikud()}
-                    onChange={(e, checked) => setShowNikud(checked)}
-                  />
-                }
-                label="נקודות"
-              />
-            </Stack>
-          </ThemeProvider>
-        </aside>
+            }
+            label={<span class={styles.GoldLabel}>הפטרות</span>}
+          />
 
-      <main class={styles.QuizArea}>
-        <Show when={loading()}>
-          <div class={styles.Center}>
-            <CircularProgress size={60} color="secondary" />
-            <Typography sx={{ mt: 2 }}>טוען פסוק אקראי...</Typography>
-          </div>
-        </Show>
+          <PronunciationToggle
+            value={isSephardic()}
+            onChange={(v) => {
+              setSephardic(v);
+              pickNewPasuk();
+            }}
+          />
+        </div>
 
-        <Show when={error()}>
-          <div class={styles.Center}>
-            <Typography color="error" variant="h6">
-              {error()}
-            </Typography>
-            <Button variant="contained" color="primary" sx={{ mt: 2 }} onClick={pickNewPasuk}>
-              נסה שוב
-            </Button>
-          </div>
-        </Show>
+        {/* Interactive Main Quiz Area */}
+        <main class={styles.QuizArea}>
+          <Show when={loading()}>
+            <div class={styles.Center}>
+              <CircularProgress size={60} sx={{ color: "#dfb15b" }} />
+              <Typography sx={{ mt: 2, color: "#dfb15b" }}>
+                טוען פסוק אקראי...
+              </Typography>
+            </div>
+          </Show>
 
-        <Show when={!loading() && !error() && selectedPasuk()}>
-          {(pasuk) => (
-            <div class={styles.QuizContent}>
-              <Card
-                class={styles.PasukCard}
-                onClick={() => setShowAnswer(true)}
-                style={{ cursor: showAnswer() ? "default" : "pointer" }}
+          <Show when={error()}>
+            <div class={styles.Center}>
+              <Typography color="error" variant="h6">
+                {error()}
+              </Typography>
+              <Button
+                variant="contained"
+                sx={{
+                  mt: 2,
+                  bgcolor: "#dfb15b",
+                  color: "#1a0221",
+                  "&:hover": { bgcolor: "#ffe49e" },
+                }}
+                onClick={pickNewPasuk}
               >
-                <CardContent>
-                  <div class={styles.PasukText} dir="rtl">
-                    {cleanText(pasuk().text)}
+                נסה שוב
+              </Button>
+            </div>
+          </Show>
+
+          <Show when={!loading() && !error() && selectedPasuk()}>
+            {(pasuk) => (
+              <div class={styles.QuizContent}>
+                {/* Parchment styled card */}
+                <Card
+                  class={styles.PasukCard}
+                  onClick={() => setShowAnswer(!showAnswer())}
+                  style={{ cursor: "pointer" }}
+                >
+                  <CardContent>
+                    <div class={styles.PasukText} dir="rtl">
+                      {cleanText(pasuk().text)}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Gold Navigation Links */}
+                <div class={styles.NavigationFooter}>
+                  <Button
+                    class={styles.NavButton}
+                    disabled={historyIndex() <= 0}
+                    onClick={goBack}
+                  >
+                    〈 PREVIOUS
+                  </Button>
+
+                  <div class={styles.TogglePanel}>
+                    <Stack
+                      direction="row"
+                      spacing={1}
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      <div class={styles.StylizedHebrewLetter}>תִּ</div>
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={showNikud()}
+                            onChange={(e, checked) => setShowNikud(checked)}
+                            sx={{
+                              "& .MuiSwitch-switchBase.Mui-checked": {
+                                color: "#dfb15b",
+                              },
+                              "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track":
+                                { backgroundColor: "#dfb15b" },
+                            }}
+                          />
+                        }
+                        label={
+                          <span
+                            style={{
+                              color: "#ffffff",
+                              "font-size": "14px",
+                              "font-weight": "bold",
+                            }}
+                          >
+                            נקודות
+                          </span>
+                        }
+                        labelPlacement="start"
+                      />
+                    </Stack>
                   </div>
-                  <Show when={!showAnswer()}>
-                    <Typography variant="body2" color="text.secondary" sx={{ mt: 2, textAlign: "center" }}>
-                      (לחץ על הפסוק כדי לגלות את המקור)
+                  <Button class={styles.NavButton} onClick={goForward}>
+                    NEXT 〉
+                  </Button>
+                </div>
+
+                {/* Collapsible Gold Bordered Reveal Source Button */}
+                <Button
+                  variant="contained"
+                  class={styles.RevealButton}
+                  onClick={() => setShowAnswer(!showAnswer())}
+                >
+                  {showAnswer() ? "HIDE SOURCE ∧" : "REVEAL SOURCE ∨"}
+                </Button>
+
+                {/* Answer Reveal Box */}
+                <Show when={showAnswer()}>
+                  <div class={styles.AnswerArea}>
+                    <Typography
+                      variant="h4"
+                      component="div"
+                      sx={{ fontWeight: "bold", color: "#dfb15b" }}
+                    >
+                      {pasuk().portionName}
                     </Typography>
-                  </Show>
-                </CardContent>
-              </Card>
+                    <Typography variant="h5" sx={{ color: "#ffe49e", mt: 1 }}>
+                      {formattedLocation(pasuk())}
+                    </Typography>
 
-              <Show when={showAnswer()}>
-                <div class={styles.AnswerArea}>
-                  <Typography variant="h4" component="div" sx={{ fontWeight: "bold" }}>
-                    {pasuk().portionName}
-                  </Typography>
-                  <Typography variant="h5" sx={{ color: "text.secondary", mt: 1 }}>
-                    {formattedLocation(pasuk())}
-                  </Typography>
-
-                  <Stack direction="row" spacing={2} justifyContent="center" sx={{ mt: 3 }}>
-                    <Button variant="contained" color="secondary" size="large" onClick={pickNewPasuk}>
-                      פסוק הבא
-                    </Button>
                     <Button
                       variant="outlined"
-                      color="primary"
+                      sx={{
+                        mt: 2,
+                        color: "#dfb15b",
+                        borderColor: "#dfb15b",
+                        "&:hover": { borderColor: "#ffe49e", color: "#ffe49e" },
+                      }}
                       component="a"
                       href={sefariaUrl(pasuk())}
                       target="_blank"
                     >
-                      צפה בספאריה
+                      צפה בספריא
                     </Button>
-                  </Stack>
-                </div>
-              </Show>
-            </div>
-          )}
-        </Show>
-      </main>
-    </div>
-  </div>
-);
+                  </div>
+                </Show>
+              </div>
+            )}
+          </Show>
+        </main>
+      </div>
+    </ThemeProvider>
+  );
 };
 
 export default LeiningQuiz;

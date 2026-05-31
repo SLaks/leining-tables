@@ -2,7 +2,7 @@ import type { Component } from "solid-js";
 
 import torah from "./assets/torah-column.jpg";
 import klaf from "./assets/klaf.webp";
-import quizImage from "./assets/torah.png";
+import quizImage from "./assets/torah-quiz.png";
 import styles from "./App.module.css";
 import { Card, CardActionArea, CardContent, Typography } from "@suid/material";
 

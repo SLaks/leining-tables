@@ -1,76 +1,164 @@
+@font-face {
+  font-family: "ShlomosemiStam";
+  src: url(/src/assets/fonts/ShlomosemiStam.ttf);
+}
+
 .Root {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #f5f5f7;
-  color: #1d1d1f;
+  background: radial-gradient(circle, #4a0e56 0%, #190221 100%);
+  color: #ffffff;
+  position: relative;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  padding-bottom: 60px;
 }
 
+/* Elegant Corner Pomegranates */
+.PomegranateDecoration {
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  opacity: 0.18;
+  pointer-events: none;
+  z-index: 1;
+
+  @media (max-width: 768px) {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+.BottomLeft {
+  bottom: 10px;
+  left: 10px;
+}
+
+.BottomRight {
+  bottom: 10px;
+  right: 10px;
+}
+
+/* Gold Crown Header */
 .Header {
-  background-color: #9c27b0;
-  color: white;
-  padding: 12px;
+  padding: 40px 24px 16px;
   text-align: center;
-
-  .link {
-    color: #e1bee7;
-    font-size: 18px;
-    text-decoration: none;
-    font-weight: bold;
-    display: inline-block;
-    margin-bottom: 16px;
-  }
-
-  .link:hover {
-    text-decoration: underline;
-  }
-}
-
-.ContentWrapper {
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
-  box-sizing: border-box;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
 
-  @media (min-width: 768px) {
-    flex-direction: row;
-    align-items: stretch;
-    padding: 24px;
-    gap: 24px;
+.CrownContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.HebrewTitleSide {
+  font-family: "ShlomosemiStam", "Georgia", "David", serif;
+  font-size: 32px;
+  font-weight: bold;
+  color: #dfb15b;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.CrownSvg {
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
+}
+
+.MainTitle {
+  font-family: "Georgia", "Times New Roman", serif;
+  font-size: 36px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  color: #dfb15b;
+  margin: 8px 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+
+  @media (max-width: 600px) {
+    font-size: 28px;
   }
 }
 
-.SettingsSidebar {
-  background-color: #ffffff;
-  border-radius: 12px;
-  border: 1px solid #e5e5ea;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  padding: 12px;
-  margin: 16px;
-  box-sizing: border-box;
+.SubTitle {
+  font-family: "ShlomosemiStam", "Georgia", "David", serif;
+  font-size: 18px;
+  color: #ffffff;
+  opacity: 0.9;
+  margin: 0 0 16px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
 
-  @media (min-width: 768px) {
-    width: 300px;
-    flex-shrink: 0;
-    align-self: flex-start;
-    position: sticky;
-    top: 24px;
-    margin: 0;
+  @media (max-width: 600px) {
+    font-size: 15px;
   }
 }
 
+.HomeLink {
+  color: #e1bee7;
+  font-size: 14px;
+  text-decoration: none;
+  font-weight: bold;
+  margin-top: 4px;
+  transition: color 0.2s ease;
+}
+
+.HomeLink:hover {
+  color: #dfb15b;
+  text-decoration: underline;
+}
+
+/* Minimalist Settings Option Row */
+.OptionsRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  max-width: 650px;
+  margin: 0 auto 24px;
+  padding: 8px ;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  border: 1px solid rgba(223, 177, 91, 0.2);
+  z-index: 2;
+  position: relative;
+
+  @media (max-width: 600px) {
+    border-radius: 16px;
+    gap: 8px;
+  }
+}
+
+.GoldLabel {
+  color: #dfb15b;
+  font-weight: bold;
+  font-size: 15px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.DividerBar {
+  color: rgba(223, 177, 91, 0.4);
+  font-weight: bold;
+  font-size: 18px;
+  user-select: none;
+}
+
+/* Quiz Main Layout */
 .QuizArea {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  padding: 16px;
+  padding: 0 24px;
   box-sizing: border-box;
-
-  @media (min-width: 768px) {
-    padding: 0;
-  }
+  z-index: 2;
+  position: relative;
 }
 
 .Center {
@@ -79,62 +167,147 @@
   align-items: center;
   justify-content: center;
   text-align: center;
+  margin-top: 60px;
 }
 
 .QuizContent {
   width: 100%;
-  max-width: 800px;
+  max-width: 850px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 32px;
+  gap: 28px;
 }
 
+/* Regal Parchment Card */
 .PasukCard {
   width: 100%;
-  background-color: #ffffff !important;
-  border: 1px solid #e5e5ea !important;
+  background: linear-gradient(to bottom, #fdfaf0 0%, #fbf4db 100%) !important;
+  border: 2px solid #dfb15b !important;
   border-radius: 16px !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06) !important;
-  transition: transform 0.2s ease, border-color 0.2s ease;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .PasukCard:hover {
-  border-color: #9c27b0 !important;
   transform: translateY(-2px);
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.7) !important;
 }
 
 .PasukText {
   font-family: "ShlomosemiStam", "Georgia", "David", serif;
   font-size: 48px;
-  color: #1d1d1f;
+  color: #1c1a13;
+  text-shadow: 0.5px 0.5px 1px rgba(255, 255, 255, 0.8);
   text-align: center;
-  line-height: 1.6;
-  padding: 24px;
+  line-height: 1.65;
+  padding: 40px;
   direction: rtl;
   word-break: break-word;
 
   @media (max-width: 600px) {
-    font-size: 32px;
-    padding: 12px;
+    font-size: 30px;
+    padding: 20px;
   }
 }
 
+/* Golden Vowel Toggle Panel */
+.TogglePanel {
+  background-color: rgba(26, 2, 33, 0.65);
+  border-radius: 30px;
+  padding: 6px 24px;
+  border: 1px solid rgba(223, 177, 91, 0.25);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+}
+
+.StylizedHebrewLetter {
+  font-family: "ShlomosemiStam", "Georgia", "David", serif;
+  font-size: 32px;
+  font-weight: bold;
+  color: #dfb15b;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  margin: 0 8px;
+  user-select: none;
+}
+
+/* Collapsible Source Button */
+.RevealButton {
+  background-color: #5e1c6b !important;
+  color: #ffffff !important;
+  font-family: "Georgia", serif !important;
+  font-size: 16px !important;
+  font-weight: bold !important;
+  letter-spacing: 1px !important;
+  border: 1.5px solid #dfb15b !important;
+  border-radius: 8px !important;
+  padding: 10px 32px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+  transition: background-color 0.2s ease, transform 0.1s ease !important;
+}
+
+.RevealButton:hover {
+  background-color: #732383 !important;
+  transform: scale(1.03);
+}
+
+.RevealButton:active {
+  transform: scale(0.98);
+}
+
+/* Answer Reveal Area */
 .AnswerArea {
+  font-family: "ShlomosemiStam", "Georgia", "David", serif;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  animation: fadeIn 0.4s ease;
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Navigation Footer Links */
+.NavigationFooter {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 600px;
+  margin-top: 16px;
+  gap: 20px;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+.NavButton {
+  color: #dfb15b !important;
+  font-family: "Georgia", serif !important;
+  font-size: 15px !important;
+  font-weight: bold !important;
+  letter-spacing: 1px !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+  transition: color 0.2s ease, transform 0.1s ease !important;
+}
+
+.NavButton:hover:not(:disabled) {
+  color: #ffe49e !important;
+  transform: translateY(-1px);
+}
+
+.NavButton:disabled {
+  color: rgba(223, 177, 91, 0.3) !important;
+  cursor: not-allowed;
 }
