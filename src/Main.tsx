@@ -2,6 +2,7 @@ import type { Component } from "solid-js";
 
 import torah from "./assets/torah-column.jpg";
 import klaf from "./assets/klaf.webp";
+import quizImage from "./assets/torah.png";
 import styles from "./App.module.css";
 import { Card, CardActionArea, CardContent, Typography } from "@suid/material";
 
@@ -61,6 +62,29 @@ const Main: Component = () => {
                   <p>
                     Print this on an index card to help locate a הפטרה while
                     scrolling through a Klaf.
+                  </p>
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+          <Card>
+            <CardActionArea
+              component="a"
+              href="/quiz"
+              sx={{ display: "flex" }}
+            >
+              <div
+                class={styles.CardImage}
+                style={{ "background-image": `url(${quizImage})` }}
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  Leining Quiz
+                </Typography>
+                <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                  <p>בחן את עצמך על קריאת התורה וההפטרה!</p>
+                  <p>
+                    Show a random verse in large font, with or without vowels, and reveal its source on click.
                   </p>
                 </Typography>
               </CardContent>

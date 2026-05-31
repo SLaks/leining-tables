@@ -6,6 +6,7 @@ import Main from "./Main";
 import { Route, Router } from "@solidjs/router";
 import KlafIndex from "./KlafIndex";
 import { TableGenerator } from "./TableGenerator";
+import LeiningQuiz from "./LeiningQuiz";
 import { Locale } from "@hebcal/core";
 import { green, purple } from "@suid/material/colors";
 import { createTheme, ThemeProvider } from "@suid/material/styles";
@@ -34,6 +35,7 @@ render(
         <Route path="/" component={Main} />
         <Route path="/klaf-index/:sefer?" component={KlafIndex} />
         <Route path="/generate-table" component={TableGenerator} />
+        <Route path="/quiz" component={LeiningQuiz} />
       </Router>
     </ThemeProvider>
   ),

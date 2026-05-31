@@ -16,11 +16,11 @@ import { byNumber, byValues } from "sort-es";
 import { Aliyah } from "@hebcal/leyning";
 import { usePersistentState } from "./ui/usePersistentState";
 import {
-  ToggleButtonGroup,
-  ToggleButton,
   createTheme,
   ThemeProvider,
 } from "@suid/material";
+import { PronunciationToggle } from "./ui/PronunciationToggle";
+
 import { purple } from "@suid/material/colors";
 
 const darkTheme = createTheme({
@@ -80,16 +80,10 @@ const KlafIndex: Component = () => {
               }}
             </For>
           </ul>
-          <ToggleButtonGroup
-            color="primary"
+          <PronunciationToggle
             value={isSephardic()}
-            exclusive
-            onChange={(event, value) => setSephardic(value)}
-            fullWidth
-          >
-            <ToggleButton value={false}>אשכנזי</ToggleButton>
-            <ToggleButton value={true}>ספרדי</ToggleButton>
-          </ToggleButtonGroup>
+            onChange={setSephardic}
+          />
           <Show when={sefer()}>
             <h2>Sefer: {sefer()}</h2>
           </Show>
