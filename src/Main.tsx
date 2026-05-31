@@ -2,7 +2,7 @@ import type { Component } from "solid-js";
 
 import torah from "./assets/torah-column.jpg";
 import klaf from "./assets/klaf.webp";
-import quizImage from "./assets/torah-quiz.png";
+import quizImage from "./assets/torah-quiz.webp";
 import styles from "./App.module.css";
 import { Card, CardActionArea, CardContent, Typography } from "@suid/material";
 
@@ -82,9 +82,9 @@ const Main: Component = () => {
                   Leining Quiz
                 </Typography>
                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  <p>בחן את עצמך על קריאת התורה וההפטרה!</p>
+                  <p dir="rtl">בחן את עצמך על קריאת התורה וההפטרה!</p>
                   <p>
-                    Show a random verse in large font, with or without vowels, and reveal its source on click.
+                    Show a random פסוק in large font, with or without vowels, and reveal its source on click.
                   </p>
                 </Typography>
               </CardContent>

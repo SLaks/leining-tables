@@ -22,10 +22,12 @@
   text-align: left;
 
   .CardImage {
-    flex-basis: 33%;
-    min-width: 100px;
+    width: 200px;
     align-self: stretch;
     background-position: center center;
     background-size: cover;
+    + * {
+      flex-grow: 1;
+    }
   }
 }
